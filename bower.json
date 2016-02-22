@@ -1,0 +1,27 @@
+{
+  "name": "arany/habitica-tool",
+  "authors": [
+    "Arany <arany.devel@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "web/lib"
+  ],
+  "devDependencies": {
+    "requirejs": "^2.1.22",
+    "r.js": "^2.1.22",
+    "jquery": "^2.2.0",
+    "angular": "^1.5.0",
+    "angular-ui-router": "^0.2.18",
+    "bootstrap": "^3.3.6",
+    "angular-resource": "^1.5.0",
+    "less": "less.js#^2.6.0",
+    "angular-local-storage": "^0.2.4"
+  }
+}

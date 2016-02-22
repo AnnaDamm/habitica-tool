@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Habitica-Tool</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <meta http-equiv="content-language" content="en">
+    <link rel="stylesheet/less" type="text/css" href="less/main.less"/>
+    <script src="lib/less/dist/less.js" type="text/javascript" data-env="development" data-async="true"></script>
+</head>
+<body>
+<div class='container' ng-controller="MainController">
+    <!--[if lt IE 9 ]>Your browser is not supported. Please install a newer browser.<![endif]-->
+    <ui-view></ui-view>
+</div>
+
+<!--[if (gt IE 8)|!(IE)]><!-->
+<script data-main="js-dev/main" src="lib/requirejs/require.js"></script>
+<!--<![endif]-->
+
+</body>
+</html>
