@@ -13,10 +13,9 @@ define([
         $scope.userId   = localStorageService.get('userId');
 
         if ($scope.apiToken === null || $scope.userId === null) {
-            $timeout(function() {
+            return $timeout(function() {
                 $state.go('config');
             }, 0);
-            return;
         }
     }
 });

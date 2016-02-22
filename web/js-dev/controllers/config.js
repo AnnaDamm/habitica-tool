@@ -3,15 +3,25 @@ define([
     './module'
 ], function (ng, module) {
     "use strict";
-    module.controller('MainController', [
-        '$scope', 'ConfigController',
+    module.controller('ConfigController', [
+        '$scope', '$state', 'localStorageService',
         ConfigController
     ]);
 
-    function ConfigController($scope, localStorageService) {
-        localStorageService.bind($scope, 'apiToken');
-        localStorageService.bind($scope, 'userId');
+    function ConfigController($scope, $state, localStorageService) {
+        $scope.apiToken  = localStorageService.get('apiToken');
+        $scope.userId    = localStorageService.get('userId');
+        $scope.uuidRegex = '^[0-9a-f]{8}-([0-9a-f]{4}-){3}[0-9a-f]{12}$';
 
-        $scope.uuidRegex = '';
+        $scope.isValid = $scope.apiToken !== null && $scope.userId !== null;
+
+        $scope.save = function () {
+            if ($scope.configForm.$valid) {
+                localStorageService.set('apiToken', $scope.apiToken);
+                localStorageService.set('userId', $scope.userId);
+
+                $state.go('main');
+            }
+        };
     }
 });
