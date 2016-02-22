@@ -1,1 +1,23 @@
-main
+<div class="main">
+    <div class="col-lg-4">
+        <div class="panel panel-default attributes">
+            <div class="panel-heading">Attributes</div>
+            <div class="panel-body">
+                <table class="table borderless" ng-if="attributes">
+                    <thead>
+                        <tr>
+                            <th colspan="2" class="class">{{ userData.stats.class }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                        <tr ng-repeat="(name, value) in attributes">
+                            <th>{{ name }}</th>
+                            <td>{{ value }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
