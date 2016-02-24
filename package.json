@@ -1,0 +1,28 @@
+{
+  "name": "habitica-tool",
+  "version": "0.0.1",
+  "description": "",
+  "main": "web/index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "node_modules/.bin/jake install-deps",
+    "prepublish": "node_modules/.bin/jake compile:all",
+    "postversion": "node_modules/.bin/jake release:create"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Arany/habitica-tool.git"
+  },
+  "author": "Arany <arany.devel@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Arany/habitica-tool/issues"
+  },
+  "homepage": "https://github.com/Arany/habitica-tool#readme",
+  "private": true,
+  "devDependencies": {
+    "bower": "^1.7.7",
+    "jake": "^8.0.12",
+    "requirejs": "^2.1.22"
+  }
+}
