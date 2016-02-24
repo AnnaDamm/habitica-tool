@@ -1,22 +1,66 @@
-<div class="main">
+<div class="main row">
     <div class="col-lg-4">
         <div class="panel panel-default attributes">
             <div class="panel-heading">Attributes</div>
-            <div class="panel-body">
-                <table class="table borderless" ng-if="attributes">
-                    <thead>
-                        <tr>
-                            <th colspan="2" class="class">{{ userData.stats.class }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                        <tr ng-repeat="(name, value) in attributes">
-                            <th>{{ name }}</th>
-                            <td>{{ value }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <table class="table borderless" ng-if="attributes">
+                <thead>
+                    <tr>
+                        <th>
+                            {{ userData.stats.class }}
+                        </th>
+                        <th>
+                            {{ userData.stats.lvl }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <tr ng-repeat="(name, value) in attributes">
+                        <th>{{ name }}</th>
+                        <td>{{ value }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-lg-8 row">
+        <div class="col-lg-6" ng-repeat="(name, info) in calculatedSpells">
+            <div class="panel" ng-class="userData.stats.lvl >= spells[name].lvl ? 'panel-info' : 'panel-warning'">
+                <div class="panel-heading">
+                    <span class="badge pull-right">Level: {{ spells[name].lvl }}</span>
+                    {{ name }}
+                </div>
+                <div class="panel-body">
+                    <ul class="list-group" ng-if="info.task">
+                        <li class="list-group-item active">
+                            <spann class="badge">{{ info.task.type }}</spann>
+                            {{ info.task.text }}
+                        </li>
+                    </ul>
+                    <ul class="list-group" ng-if="info.bonuses">
+                        <li class="list-group-item" ng-repeat-start="(bonus, amount) in info.bonuses">
+                            <span class="badge">{{ bonus }}</span>
+                            {{ round(amount, 2) }}
+                        </li>
+                        <li class="list-group-item" ng-repeat-end ng-if="spells[name].mana">
+                            <span class="badge">{{ bonus }}</span>
+                            {{ round(amount / spells[name].mana, 2) }} per Mana
+                        </li>
+                    </ul>
+                    <ul class="list-group" ng-if="info.crit">
+                        <li class="list-group-item">Crit-Chance: {{ round(info.crit.chance * 100) }}% ->
+                            +{{round(((info.crit.multiplier - 1) * 100), 2) }}%
+                        </li>
+                        <li class="list-group-item" ng-repeat-start="(bonus, amount) in info.crit.bonuses">
+                            <span class="badge">{{ bonus }}</span>
+                            {{ round(amount, 2) }}
+                        </li>
+                        <li class="list-group-item" ng-repeat-end ng-if="spells[name].mana">
+                            <span class="badge">{{ bonus }}</span>
+                            {{ round(amount / spells[name].mana, 2) }} per Mana
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -1,31 +1,31 @@
 require.config({
     paths: {
-        angular:                                         "../lib/angular/angular",
-        "angular-resource":                              "../lib/angular-resource/angular-resource",
-        "angular-local-storage":                         "../lib/angular-local-storage/dist/angular-local-storage",
-        "angular-ui-router":                             "../lib/angular-ui-router/release/angular-ui-router",
-        bootstrap:                                       "../lib/bootstrap/dist/js/bootstrap",
-        jquery:                                          "../lib/jquery/dist/jquery"
+        angular:                 "../lib/angular/angular",
+        "angular-resource":      "../lib/angular-resource/angular-resource",
+        "angular-local-storage": "../lib/angular-local-storage/dist/angular-local-storage",
+        "angular-ui-router":     "../lib/angular-ui-router/release/angular-ui-router",
+        bootstrap:               "../lib/bootstrap/dist/js/bootstrap",
+        jquery:                  "../lib/jquery/dist/jquery"
 
     },
     shim:  {
-        angular:                                         {
+        angular:                 {
             exports: 'angular',
             deps:    ['jquery']
         },
-        "angular-resource":                              {
+        "angular-resource":      {
             deps: ['angular']
         },
-        "angular-ui-router":                             {
+        "angular-ui-router":     {
             deps: ['angular']
         },
-        "angular-local-storage":                             {
+        "angular-local-storage": {
             deps: ['angular']
         },
-        jquery:                                          {
+        jquery:                  {
             exports: '$'
         },
-        bootstrap: {
+        bootstrap:               {
             deps: ['jquery']
         }
     }

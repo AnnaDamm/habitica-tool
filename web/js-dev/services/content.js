@@ -12,7 +12,7 @@ define([
             return {
                 getAll:       function () {
                     if (!allContent) {
-                        allContent = content.get();
+                        allContent = content.get().$promise;
                     }
                     return allContent;
                 },
@@ -20,7 +20,7 @@ define([
                     var defer = $q.defer();
 
                     if (!gear) {
-                        this.getAll().$promise.then(function (all) {
+                        this.getAll().then(function (all) {
                             gear = all.gear.flat;
                             defer.resolve(gear);
                         });
