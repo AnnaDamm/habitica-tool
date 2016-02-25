@@ -34,7 +34,8 @@
                 <div class="panel-body">
                     <ul class="list-group" ng-if="info.task">
                         <li class="list-group-item active">
-                            <spann class="badge">{{ info.task.type }}</spann>
+                            <span class="badge">{{ info.task.type }}</span>
+                            <span class="badge">{{ round(info.task.value, 1) }}</span>
                             {{ info.task.text }}
                         </li>
                     </ul>

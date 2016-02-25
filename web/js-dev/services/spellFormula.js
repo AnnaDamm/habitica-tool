@@ -18,6 +18,20 @@ define([
         ]);
     }
 
+    function getLowestValueTaskInArray(array) {
+        return array.reduce(function (previous, current) {
+            return !previous || previous.value > current.value ? current : previous;
+        });
+    }
+
+    function getLowestValueTask(userData) {
+        return getLowestValueTaskInArray([
+            getLowestValueTaskInArray(userData.habits),
+            getLowestValueTaskInArray(userData.dailys),
+            getLowestValueTaskInArray(userData.todos)
+        ]);
+    }
+
     function getDueDailies(userData) {
         var date         = new Date(),
             dayOfTheWeek = date.getDay(),
@@ -166,22 +180,51 @@ define([
                 bonuses: {
                     str: unBuffedAttributes.str / (unBuffedAttributes.str + 200)
                 },
-                group: true
+                group:   true
             },
             intimidate:       {
-                bonuses:{
+                bonuses: {
                     con: unBuffedAttributes.con * 24 / (unBuffedAttributes.con + 200)
+                },
+                group:   true
+            }
+        }
+    }
+
+    function getHealerSpells(userData, attributes, unBuffedAttributes) {
+        return {
+            heal:        {
+                bonuses: {
+                    hp: (attributes.con + attributes.int + 5) * 0.075
+                }
+            },
+            brightness:  {
+                bonuses: {
+                    redness: 4 * (attributes.int / (attributes.int + 40))
+                },
+                task:    getLowestValueTask(userData)
+            },
+            protectAura: {
+                bonuses: {
+                    con: 200 * unBuffedAttributes.con / (unBuffedAttributes.con + 200)
+                },
+                group: true
+            },
+            heallAll:    {
+                bonuses: {
+                    hp: (attributes.con + attributes.int + 5) * 0.04
                 },
                 group: true
             }
-        }
+        };
     }
 
     function getByClass(userData, attributes, unBuffedAttributes) {
         var spells = {
             rogue:   getRogueSpells,
             wizard:  getWizardSpells,
-            warrior: getWarriorSpells
+            warrior: getWarriorSpells,
+            healer:  getHealerSpells
         };
 
         if (spells[userData.stats.class]) {
