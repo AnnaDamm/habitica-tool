@@ -139,10 +139,49 @@ define([
         };
     }
 
+    function getWarriorSpells(userData, attributes, unBuffedAttributes) {
+        return {
+            smash:            (function () {
+                var critMultiplier = getCritMultiplier(attributes.con),
+                    dmg            = 55 * attributes.str / (attributes.str + 70);
+                return {
+                    bonuses: {
+                        dmg: dmg
+                    },
+                    crit:    {
+                        chance:     getCritChance(attributes.con),
+                        multiplier: critMultiplier,
+                        bonuses:    {
+                            dmg: dmg * critMultiplier
+                        }
+                    }
+                }
+            }()),
+            defensiveStance:  {
+                bonuses: {
+                    con: unBuffedAttributes.con * 40 / (unBuffedAttributes.con + 200)
+                }
+            },
+            valorousPresence: {
+                bonuses: {
+                    str: unBuffedAttributes.str / (unBuffedAttributes.str + 200)
+                },
+                group: true
+            },
+            intimidate:       {
+                bonuses:{
+                    con: unBuffedAttributes.con * 24 / (unBuffedAttributes.con + 200)
+                },
+                group: true
+            }
+        }
+    }
+
     function getByClass(userData, attributes, unBuffedAttributes) {
         var spells = {
-            rogue:  getRogueSpells,
-            wizard: getWizardSpells
+            rogue:   getRogueSpells,
+            wizard:  getWizardSpells,
+            warrior: getWarriorSpells
         };
 
         if (spells[userData.stats.class]) {
