@@ -32,6 +32,15 @@ define([
 
         userService.getData().then(function (userData) {
             $scope.userData = userData;
+
+            $scope.tasks = userData.habits
+                .concat(userData.dailys)
+                .concat(userData.todos.filter(function (todo) {
+                    return !todo.completed;
+                }))
+                .sort(function (a, b) {
+                    return b.value - a.value;
+                });
         });
 
         userService.getAttributes().then(function (attributes) {

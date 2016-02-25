@@ -2,7 +2,7 @@
     <div class="col-lg-4">
         <div class="panel panel-default attributes">
             <div class="panel-heading">Attributes</div>
-            <table class="table borderless" ng-if="attributes">
+            <table class="table" ng-if="attributes">
                 <thead>
                     <tr>
                         <th>
@@ -18,6 +18,25 @@
                     <tr ng-repeat="(name, value) in attributes">
                         <th>{{ name }}</th>
                         <td>{{ value }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel panel-default tasks" ng-if="tasks.length">
+            <div class="panel-heading">Tasks</div>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="task in tasks">
+                        <td>{{ task.text }}</td>
+                        <td>{{ task.type }}</td>
+                        <td class="value">{{ round(task.value, 1) }}</td>
                     </tr>
                 </tbody>
             </table>
