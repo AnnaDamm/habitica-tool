@@ -28,6 +28,7 @@
             <div class="panel" ng-class="userData.stats.lvl >= spells[name].lvl ? 'panel-info' : 'panel-warning'">
                 <div class="panel-heading">
                     <span class="badge pull-right">Level: {{ spells[name].lvl }}</span>
+                    <span class="badge pull-right" ng-if="info.group">group</span>
                     {{ spells[name].text }}
                 </div>
                 <div class="panel-body">
@@ -39,12 +40,10 @@
                     </ul>
                     <ul class="list-group" ng-if="info.bonuses">
                         <li class="list-group-item" ng-repeat-start="(bonus, amount) in info.bonuses">
-                            <span class="badge">{{ bonus }}</span>
-                            {{ round(amount, 2) }}
+                            {{ bonus }}: {{ round(amount, 2) }}
                         </li>
                         <li class="list-group-item" ng-repeat-end ng-if="spells[name].mana">
-                            <span class="badge">{{ bonus }}</span>
-                            {{ round(amount / spells[name].mana, 2) }} per Mana
+                            {{ bonus }}: {{ round(amount / spells[name].mana, 2) }} per Mana
                         </li>
                     </ul>
                     <ul class="list-group" ng-if="info.crit">
@@ -52,12 +51,16 @@
                             +{{round(((info.crit.multiplier - 1) * 100), 2) }}%
                         </li>
                         <li class="list-group-item" ng-repeat-start="(bonus, amount) in info.crit.bonuses">
-                            <span class="badge">{{ bonus }}</span>
-                            {{ round(amount, 2) }}
+                            {{ bonus }}: {{ round(amount, 2) }}
                         </li>
                         <li class="list-group-item" ng-repeat-end ng-if="spells[name].mana">
-                            <span class="badge">{{ bonus }}</span>
-                            {{ round(amount / spells[name].mana, 2) }} per Mana
+                            {{ bonus }}: {{ round(amount / spells[name].mana, 2) }} per Mana
+                        </li>
+                    </ul>
+                    <ul class="list-group" ng-repeat="custom in info.custom">
+                        <li class="list-group-item active">{{ custom.name }}</li>
+                        <li class="list-group-item" ng-repeat="item in custom.items">
+                            {{ item.text }}
                         </li>
                     </ul>
                 </div>
