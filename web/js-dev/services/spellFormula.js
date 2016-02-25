@@ -78,14 +78,14 @@ define([
             }()),
             toolsOfTrade: {
                 bonuses: {
-                    amount: 0.64 * getNumberOfDueDailies(userData) * attributes.per / (attributes.per + 55)
-                }
-            },
-            stealth:      {
-                bonuses: {
                     per: unBuffedAttributes.per * 100 / (unBuffedAttributes.per + 50),
                 },
                 group:   true
+            },
+            stealth:      {
+                bonuses: {
+                    amount: 0.64 * getNumberOfDueDailies(userData) * attributes.per / (attributes.per + 55)
+                }
             }
         };
     }
