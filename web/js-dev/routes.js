@@ -9,12 +9,12 @@ define([
         $stateProvider
             .state('main', {
                 url:         '/',
-                templateUrl: '/templates/main.html',
+                templateUrl: 'templates/main.html',
                 controller: 'MainController'
             })
             .state('config', {
                 url:         '/config',
-                templateUrl: '/templates/config.html',
+                templateUrl: 'templates/config.html',
                 controller: 'ConfigController'
             });
     });

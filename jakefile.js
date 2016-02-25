@@ -5,8 +5,7 @@ var releaseFiles = [
     'index.html',
     'js',
     'css',
-    'fonts',
-    'templates'
+    'fonts'
 ];
 
 desc('Compile all sources to make a live version.');
@@ -55,7 +54,7 @@ namespace('compile', function () {
 
 namespace('release', function () {
     desc('Creates a release.');
-    task('create', {async: true}, ['compile:all'], function () {
+    task('create', ['compile:all'], {async: true}, function () {
         var packageJson = require('./package.json'),
             version     = packageJson.version;
 

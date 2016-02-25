@@ -1,14 +1,17 @@
 define([
     'angular',
-    './module'
-], function (ng, module) {
+    './module',
+    'text!templates/main.html'
+], function (ng, module, html) {
     "use strict";
     module.controller('MainController', [
         '$scope', '$state', '$timeout', '$window',
         'localStorageService',
         'userService', 'spellFormulaService',
         MainController
-    ]);
+    ]).run(function ($templateCache) {
+        $templateCache.put('templates/main.html', html);
+    });
 
     function MainController($scope, $state, $timeout, $window,
                             localStorageService,

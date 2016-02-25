@@ -5,7 +5,8 @@ require.config({
         "angular-local-storage": "../lib/angular-local-storage/dist/angular-local-storage",
         "angular-ui-router":     "../lib/angular-ui-router/release/angular-ui-router",
         bootstrap:               "../lib/bootstrap/dist/js/bootstrap",
-        jquery:                  "../lib/jquery/dist/jquery"
+        jquery:                  "../lib/jquery/dist/jquery",
+        text:                    "../lib/text/text"
 
     },
     shim:  {
@@ -27,7 +28,7 @@ require.config({
         },
         bootstrap:               {
             deps: ['jquery']
-        }
+        },
     }
 });
 
@@ -35,7 +36,8 @@ define([
     'angular',
     'app',
     'routes',
-    'bootstrap'
+    'bootstrap',
+    'text'
 ], function (ng) {
     "use strict";
 
