@@ -5,7 +5,7 @@ define([
 ], function (ng, module, html) {
     "use strict";
     module.controller('MainController', [
-        '$scope', '$state', '$timeout', '$window',
+        '$scope', '$state', '$timeout',
         'localStorageService',
         'userService', 'spellFormulaService',
         MainController
@@ -13,16 +13,14 @@ define([
         $templateCache.put('templates/main.html', html);
     });
 
-    function MainController($scope, $state, $timeout, $window,
+    function MainController($scope, $state, $timeout,
                             localStorageService,
                             userService, spellFormulaService) {
 
         $scope.apiToken = localStorageService.get('apiToken');
         $scope.userId   = localStorageService.get('userId');
 
-        $scope.round = function (number, decimals) {
-            return new Intl.NumberFormat('en-US', {maximumFractionDigits: decimals}).format(number);
-        };
+        $scope.round = spellFormulaService.round;
 
         if ($scope.apiToken === null || $scope.userId === null) {
             return $timeout(function () {

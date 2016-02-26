@@ -1,7 +1,7 @@
 <div class="main row">
     <div class="col-lg-4">
         <div class="panel panel-default attributes">
-            <div class="panel-heading">Attributes</div>
+            <div class="panel-heading"><strong>{{ userData.profile.name }}</strong></div>
             <table class="table" ng-if="attributes">
                 <thead>
                     <tr>
@@ -71,6 +71,15 @@
                             +{{round(((info.crit.multiplier - 1) * 100), 2) }}%
                         </li>
                         <li class="list-group-item" ng-repeat-start="(bonus, amount) in info.crit.bonuses">
+                            {{ bonus }}: {{ round(amount, 2) }}
+                        </li>
+                        <li class="list-group-item" ng-repeat-end ng-if="spells[name].mana">
+                            {{ bonus }}: {{ round(amount / spells[name].mana, 2) }} per Mana
+                        </li>
+                    </ul>
+                    <ul class="list-group" ng-if="info.groupBonuses">
+                        <li class="list-group-item active">Group Total</li>
+                        <li class="list-group-item" ng-repeat-start="(bonus, amount) in info.groupBonuses">
                             {{ bonus }}: {{ round(amount, 2) }}
                         </li>
                         <li class="list-group-item" ng-repeat-end ng-if="spells[name].mana">

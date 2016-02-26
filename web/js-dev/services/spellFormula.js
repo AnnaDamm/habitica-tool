@@ -195,7 +195,7 @@ define([
         return {
             heal:        {
                 bonuses: {
-                    hp: (attributes.con + attributes.int + 5) * 0.075
+                    hp: Math.min((attributes.con + attributes.int + 5) * 0.075, 50 - userData.stats.hp)
                 }
             },
             brightness:  {
@@ -208,49 +208,84 @@ define([
                 bonuses: {
                     con: 200 * unBuffedAttributes.con / (unBuffedAttributes.con + 200)
                 },
-                group: true
+                group:   true
             },
             heallAll:    {
                 bonuses: {
                     hp: (attributes.con + attributes.int + 5) * 0.04
                 },
-                group: true
+                group:   true
             }
         };
     }
 
-    function getByClass(userData, attributes, unBuffedAttributes) {
+    function calculateGroupBuffs(spells, partyMembers) {
+        if (!partyMembers) {
+            return spells;
+        }
+        ng.forEach(spells, function (info, name) {
+            if (!info.group) {
+                return;
+            }
+            var groupBonuses = {};
+            ng.forEach(info.bonuses, function (amount, name) {
+                var amount = round(amount, 2);
+                if (name === "hp") {
+                    groupBonuses[name] = 0;
+                    ng.forEach(partyMembers, function (member) {
+                        groupBonuses[name] += Math.min(amount, round(50 - member.stats.hp, 2));
+                    });
+                } else {
+                    groupBonuses[name] = amount * partyMembers.length;
+                }
+            });
+
+            info.groupBonuses = groupBonuses;
+        });
+
+        return spells;
+    }
+
+    function getByClass(userData, attributes, unBuffedAttributes, partyMembers) {
         var spells = {
-            rogue:   getRogueSpells,
-            wizard:  getWizardSpells,
-            warrior: getWarriorSpells,
-            healer:  getHealerSpells
-        };
+                rogue:   getRogueSpells,
+                wizard:  getWizardSpells,
+                warrior: getWarriorSpells,
+                healer:  getHealerSpells
+            },
+            classSpells;
 
         if (spells[userData.stats.class]) {
-            return spells[userData.stats.class](userData, attributes, unBuffedAttributes);
+            classSpells = spells[userData.stats.class](userData, attributes, unBuffedAttributes);
+            return calculateGroupBuffs(classSpells, partyMembers);
         }
 
         return null;
     }
 
+    function round(number, decimals) {
+        return new Intl.NumberFormat('en-US', {maximumFractionDigits: decimals}).format(number);
+    }
+
 
     module.service('spellFormulaService', [
-        '$q', 'userService',
-        function ($q, userService) {
+        '$q', 'userService', 'groupService', 'members',
+        function ($q, userService, groupService, members) {
             return {
                 calculateAll: function () {
                     var defer = $q.defer();
 
                     $q.all([
+                        groupService.getPartyMembers(),
                         userService.getData(),
                         userService.getAttributes(),
                         userService.getAttributes(true)
                     ]).then(function (values) {
-                        var userData           = values[0],
-                            attributes         = values[1],
-                            unBuffedAttributes = values[2],
-                            spells             = getByClass(userData, attributes, unBuffedAttributes);
+                        var partyMembers       = values[0],
+                            userData           = values[1],
+                            attributes         = values[2],
+                            unBuffedAttributes = values[3],
+                            spells             = getByClass(userData, attributes, unBuffedAttributes, partyMembers);
 
                         if (spells === null) {
                             defer.reject();
@@ -260,7 +295,8 @@ define([
                     });
 
                     return defer.promise;
-                }
+                },
+                round: round
             };
         }
     ]);
