@@ -98,7 +98,7 @@ define([
             }()),
             toolsOfTrade: {
                 bonuses: {
-                    per: getDiminishingReturns(unBuffedAttributes.per, 100, 50)
+                    per: Math.ceil(getDiminishingReturns(unBuffedAttributes.per, 100, 50))
                 },
                 group: true
             },
@@ -139,7 +139,7 @@ define([
             },
             earth: {
                 bonuses: {
-                    int: getDiminishingReturns(unBuffedAttributes.int, 30, 200)
+                    int: Math.ceil(getDiminishingReturns(unBuffedAttributes.int, 30, 200))
                 },
                 group: true
             },
@@ -173,18 +173,18 @@ define([
             }()),
             defensiveStance: {
                 bonuses: {
-                    con: getDiminishingReturns(unBuffedAttributes.con, 40, 200)
+                    con: Math.ceil(getDiminishingReturns(unBuffedAttributes.con, 40, 200))
                 }
             },
             valorousPresence: {
                 bonuses: {
-                    str: getDiminishingReturns(unBuffedAttributes.str, 20, 200)
+                    str: Math.ceil(getDiminishingReturns(unBuffedAttributes.str, 20, 200))
                 },
                 group: true
             },
             intimidate: {
                 bonuses: {
-                    con: getDiminishingReturns(unBuffedAttributes.con, 24, 200)
+                    con: Math.ceil(getDiminishingReturns(unBuffedAttributes.con, 24, 200))
                 },
                 group: true
             }
@@ -206,7 +206,7 @@ define([
             },
             protectAura: {
                 bonuses: {
-                    con: getDiminishingReturns(unBuffedAttributes.con, 200, 200)
+                    con: Math.ceil(getDiminishingReturns(unBuffedAttributes.con, 200, 200))
                 },
                 group: true
             },
