@@ -39,7 +39,7 @@ define([
                         var gear       = values[0],
                             userData   = values[1],
                             attributes = {},
-                            levelBonus = Math.floor((userData.stats.lvl - 1) / 2);
+                            levelBonus = Math.ceil((userData.stats.lvl - 1) / 2);
 
                         // base stats
                         ng.forEach(attributesToUse, function (name) {
