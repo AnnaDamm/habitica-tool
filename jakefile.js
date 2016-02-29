@@ -27,7 +27,7 @@ namespace('compile', function () {
     desc('Creates CSS files');
     task('css', {async: true}, function () {
         jake.mkdirP('web/css');
-        jake.exec("lessc -x ./web/less/main.less > ./web/css/main.css", function () {
+        jake.exec("node_modules/.bin/lessc -x ./web/less/main.less > ./web/css/main.css", function () {
             complete();
         });
     });

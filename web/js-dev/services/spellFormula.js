@@ -59,50 +59,52 @@ define([
         return 3 * (1 + attribute / 100) / 100;
     }
 
+    function getDiminishingReturns(bonus, max, halfway) {
+        return max * (bonus / (bonus + halfway));
+    }
+
 
     function getRogueSpells(userData, attributes, unBuffedAttributes) {
         var bestTask = getHighestValueTask(userData);
         return {
-            pickPocket:   (function () {
+            pickPocket: (function () {
                 var bonus = Math.max(0, bestTask.value) + 1 + attributes.per * 0.5;
                 return {
                     bonuses: {
-                        gold: 25 * bonus / (bonus + 75)
+                        gold: getDiminishingReturns(bonus, 25, 75)
                     },
-                    task:    bestTask
+                    task: bestTask
                 }
             }()),
-            backStab:     (function () {
+            backStab: (function () {
                 var bonus          = Math.max(0, bestTask.value) + 1 + attributes.str * 0.5,
-                    xp             = 75 * bonus / (bonus + 50),
-                    gold           = 18 * bonus / (bonus + 75),
                     critMultiplier = getCritMultiplier(attributes.str);
 
                 return {
                     bonuses: {
-                        xp:   xp,
-                        gold: gold
+                        xp: getDiminishingReturns(bonus, 75, 50),
+                        gold: getDiminishingReturns(bonus, 18, 75)
                     },
-                    crit:    {
-                        chance:     0.3,
+                    crit: {
+                        chance: 0.3,
                         multiplier: critMultiplier,
-                        bonuses:    {
-                            xp:   xp * critMultiplier,
-                            gold: gold * critMultiplier
+                        bonuses: {
+                            xp: getDiminishingReturns(critMultiplier * bonus, 75, 50),
+                            gold: getDiminishingReturns(critMultiplier * bonus, 18, 75)
                         }
                     },
-                    task:    bestTask
+                    task: bestTask
                 };
             }()),
             toolsOfTrade: {
                 bonuses: {
-                    per: unBuffedAttributes.per * 100 / (unBuffedAttributes.per + 50)
+                    per: getDiminishingReturns(unBuffedAttributes.per, 100, 50)
                 },
-                group:   true
+                group: true
             },
-            stealth:      {
+            stealth: {
                 bonuses: {
-                    amount: 0.64 * getDueDailies(userData).length * attributes.per / (attributes.per + 55)
+                    amount: getDiminishingReturns(attributes.per, 0.64 * getDueDailies(userData).length, 55)
                 }
             }
         };
@@ -113,38 +115,37 @@ define([
         return {
             fireball: (function () {
                 var bonus          = Math.max(0, bestTask.value) + 1 + attributes.int * 0.075,
-                    critMultiplier = getCritMultiplier(attributes.per),
-                    xp             = 75 * bonus / (bonus + 37.5);
+                    critMultiplier = getCritMultiplier(attributes.per);
 
                 return {
                     bonuses: {
-                        xp: xp
+                        xp: getDiminishingReturns(bonus, 75, 37.5)
                     },
-                    crit:    {
-                        chance:     getCritChance(attributes.per),
+                    crit: {
+                        chance: getCritChance(attributes.per),
                         multiplier: critMultiplier,
-                        bonuses:    {
-                            xp: xp * critMultiplier
+                        bonuses: {
+                            xp: getDiminishingReturns(critMultiplier * bonus, 75, 37.5)
                         }
                     },
-                    task:    bestTask
+                    task: bestTask
                 }
             }()),
-            mpheal:   {
+            mpheal: {
                 bonuses: {
-                    mp: attributes.int * 25 / (attributes.int + 125)
+                    mp: getDiminishingReturns(attributes.int, 25, 125)
                 },
-                group:   true
+                group: true
             },
-            earth:    {
+            earth: {
                 bonuses: {
-                    int: unBuffedAttributes.int * 30 / (unBuffedAttributes.int + 200)
+                    int: getDiminishingReturns(unBuffedAttributes.int, 30, 200)
                 },
-                group:   true
+                group: true
             },
-            frost:    {
+            frost: {
                 custom: [{
-                    name:  "unfinished tasks",
+                    name: "unfinished tasks",
                     items: getDueDailies(userData).filter(function (daily) {
                         return !daily.completed;
                     })
@@ -155,66 +156,65 @@ define([
 
     function getWarriorSpells(userData, attributes, unBuffedAttributes) {
         return {
-            smash:            (function () {
-                var critMultiplier = getCritMultiplier(attributes.con),
-                    dmg            = 55 * attributes.str / (attributes.str + 70);
+            smash: (function () {
+                var critMultiplier = getCritMultiplier(attributes.con);
                 return {
                     bonuses: {
-                        dmg: dmg
+                        dmg: getDiminishingReturns(attributes.str, 55, 70)
                     },
-                    crit:    {
-                        chance:     getCritChance(attributes.con),
+                    crit: {
+                        chance: getCritChance(attributes.con),
                         multiplier: critMultiplier,
-                        bonuses:    {
-                            dmg: dmg * critMultiplier
+                        bonuses: {
+                            dmg: getDiminishingReturns(critMultiplier * attributes.str, 55, 70)
                         }
                     }
                 }
             }()),
-            defensiveStance:  {
+            defensiveStance: {
                 bonuses: {
-                    con: unBuffedAttributes.con * 40 / (unBuffedAttributes.con + 200)
+                    con: getDiminishingReturns(unBuffedAttributes.con, 40, 200)
                 }
             },
             valorousPresence: {
                 bonuses: {
-                    str: unBuffedAttributes.str / (unBuffedAttributes.str + 200)
+                    str: getDiminishingReturns(unBuffedAttributes.str, 20, 200)
                 },
-                group:   true
+                group: true
             },
-            intimidate:       {
+            intimidate: {
                 bonuses: {
-                    con: unBuffedAttributes.con * 24 / (unBuffedAttributes.con + 200)
+                    con: getDiminishingReturns(unBuffedAttributes.con, 24, 200)
                 },
-                group:   true
+                group: true
             }
         }
     }
 
     function getHealerSpells(userData, attributes, unBuffedAttributes) {
         return {
-            heal:        {
+            heal: {
                 bonuses: {
                     hp: Math.min((attributes.con + attributes.int + 5) * 0.075, 50 - userData.stats.hp)
                 }
             },
-            brightness:  {
+            brightness: {
                 bonuses: {
-                    redness: 4 * (attributes.int / (attributes.int + 40))
+                    redness: getDiminishingReturns(attributes.int, 4, 40)
                 },
-                task:    getLowestValueTask(userData)
+                task: getLowestValueTask(userData)
             },
             protectAura: {
                 bonuses: {
-                    con: 200 * unBuffedAttributes.con / (unBuffedAttributes.con + 200)
+                    con: getDiminishingReturns(unBuffedAttributes.con, 200, 200)
                 },
-                group:   true
+                group: true
             },
-            heallAll:    {
+            heallAll: {
                 bonuses: {
                     hp: (attributes.con + attributes.int + 5) * 0.04
                 },
-                group:   true
+                group: true
             }
         };
     }
@@ -248,10 +248,10 @@ define([
 
     function getByClass(userData, attributes, unBuffedAttributes, partyMembers) {
         var spells = {
-                rogue:   getRogueSpells,
-                wizard:  getWizardSpells,
+                rogue: getRogueSpells,
+                wizard: getWizardSpells,
                 warrior: getWarriorSpells,
-                healer:  getHealerSpells
+                healer: getHealerSpells
             },
             classSpells;
 
