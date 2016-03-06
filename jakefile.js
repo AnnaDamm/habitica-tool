@@ -60,7 +60,8 @@ namespace('release', function () {
 
         jake.mkdirP('dist');
         jake.exec([
-            "tar -zcvf dist/v" + version + ".tar.gz -C web " + releaseFiles.join(" ")
+            "tar -zcvf dist/v" + version + ".tar.gz -C web " + releaseFiles.join(" "),
+            "cd web && zip -r ../dist/v" + version + ".zip " + releaseFiles.join(" ")
         ], function () {
             complete();
         });
