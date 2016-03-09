@@ -12,6 +12,11 @@ define([
                 templateUrl: 'templates/main.html',
                 controller: 'MainController'
             })
+            .state('gear', {
+                url:         '/gear',
+                templateUrl: 'templates/gear.html',
+                controller: 'GearController'
+            })
             .state('config', {
                 url:         '/config',
                 templateUrl: 'templates/config.html',

@@ -9,14 +9,17 @@ define([
             var userData;
 
             return {
-                getData:       function (reload) {
+                attributesToUse: [
+                    'str', 'int', 'con', 'per'
+                ],
+                getData: function (reload) {
                     if (!userData || reload === true) {
                         userData = user.get().$promise;
                     }
 
                     return userData;
                 },
-                getClass:      function () {
+                getClass: function () {
                     var defer = $q.defer();
 
                     this.getData().then(function (userData) {
@@ -25,47 +28,71 @@ define([
 
                     return defer.promise;
                 },
-                getAttributes: function (unBuffed) {
-                    var attributesToUse = [
-                            'str', 'int', 'con', 'per'
-                        ],
-                        defer           = $q.defer(),
-                        unBuffed        = unBuffed || false;
+                getLevelBonus: function (level) {
+                    return Math.ceil((level - 1) / 2);
+                },
+                getGearBonuses: function (equippedGear, userClass, gearData) {
+                    var self       = this,
+                        attributes = {};
+
+                    ng.forEach(equippedGear, function (itemName, slot) {
+                        var itemData = gearData[itemName];
+                        if (itemData) {
+                            var isClassItem = itemData.klass == userClass;
+                            ng.forEach(self.attributesToUse, function (name) {
+                                attributes[name] = (attributes[name] ? attributes[name] : 0) + itemData[name] * (isClassItem ? 1.5 : 1);
+                            });
+                        }
+                    });
+
+                    return attributes;
+                },
+                calculateAttributes: function (userData, gearBonuses, unBuffed) {
+                    var levelBonus = this.getLevelBonus(userData.stats.lvl),
+                        attributes = {};
+
+                    unBuffed = unBuffed || false;
+
+                    // base stats
+                    ng.forEach(this.attributesToUse, function (name) {
+                        attributes[name] = userData.stats[name] + levelBonus;
+                        if (!unBuffed && userData.stats.buffs && userData.stats.buffs[name]) {
+                            attributes[name] += userData.stats.buffs[name];
+                        }
+                        if (gearBonuses[name]) {
+                            attributes[name] += gearBonuses[name];
+                        }
+                    });
+
+                    return attributes;
+                },
+                getAttributes: function (unBuffed, userData) {
+                    var defer    = $q.defer(),
+                        self     = this;
 
                     $q.all([
                         contentService.getGear(),
-                        this.getData()
+                        (function () {
+                            if (userData) {
+                                var defer = $q.defer();
+                                defer.resolve(userData);
+                                return defer.promise;
+                            } else {
+                                return self.getData();
+                            }
+                        }())
                     ]).then(function (values) {
-                        var gear       = values[0],
-                            userData   = values[1],
-                            attributes = {},
-                            levelBonus = Math.ceil((userData.stats.lvl - 1) / 2);
-
-                        // base stats
-                        ng.forEach(attributesToUse, function (name) {
-                            attributes[name] = userData.stats[name] + levelBonus;
-                            if (!unBuffed && userData.stats.buffs && userData.stats.buffs[name]) {
-                                attributes[name] += userData.stats.buffs[name];
-                            }
-                        });
-
-                        // add gear stats
-                        ng.forEach(userData.items.gear.equipped, function (itemName, slot) {
-                            var itemData    = gear[itemName],
-                                isClassItem = itemData.klass == userData.stats.class;
-                            if (itemData) {
-                                ng.forEach(attributesToUse, function (name) {
-                                    attributes[name] += itemData[name] * (isClassItem ? 1.5 : 1);
-                                });
-                            }
-                        });
+                        var gear      = values[0],
+                            userData  = values[1],
+                            gearBonuses = self.getGearBonuses(userData.items.gear.equipped, userData.stats.class, gear),
+                            attributes = self.calculateAttributes(userData, gearBonuses, unBuffed);
 
                         defer.resolve(attributes);
                     });
 
                     return defer.promise;
                 },
-                getSpells:     function () {
+                getSpells: function () {
                     var defer = $q.defer();
 
                     $q.all([

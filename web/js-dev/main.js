@@ -4,6 +4,7 @@ require.config({
         "angular-resource":      "../lib/angular-resource/angular-resource",
         "angular-local-storage": "../lib/angular-local-storage/dist/angular-local-storage",
         "angular-ui-router":     "../lib/angular-ui-router/release/angular-ui-router",
+        "angular-ui-bootstrap":  "../lib/angular-bootstrap/ui-bootstrap-tpls",
         bootstrap:               "../lib/bootstrap/dist/js/bootstrap",
         jquery:                  "../lib/jquery/dist/jquery",
         text:                    "../lib/text/text"
@@ -20,6 +21,9 @@ require.config({
         "angular-ui-router":     {
             deps: ['angular']
         },
+        "angular-ui-bootstrap":     {
+            deps: ['angular']
+        },
         "angular-local-storage": {
             deps: ['angular']
         },
@@ -28,7 +32,7 @@ require.config({
         },
         bootstrap:               {
             deps: ['jquery']
-        },
+        }
     }
 });
 

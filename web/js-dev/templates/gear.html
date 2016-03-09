@@ -1,0 +1,80 @@
+<div class="gear">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="attributes panel panel-default">
+                <div class="panel-heading clearfix">
+                    <button class="pull-right btn btn-sm btn-default" ng-click="reset()">Reset</button>
+                    Attributes
+                </div>
+                <table class="table" ng-if="userData">
+                    <thead>
+                    <tr>
+                        <th>lvl</th>
+                        <th>{{ userData.stats.lvl}}</th>
+                        <th>Levelbonus</th>
+                        <th>Gearbonus</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="attribute in attributesToUse">
+                        <th>{{ attribute }}</th>
+                        <td>{{ userData.stats[attribute]}}</td>
+                        <td>+{{ levelBonus }}</td>
+                        <td>+{{ gearBonus[attribute] }}</td>
+                        <th>= {{ attributes[attribute] }}</th>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="gear panel panel-default">
+                <div class="panel-heading clearfix">
+                    <button class="pull-right btn btn-sm btn-default" ng-click="reset()">Reset</button>
+                    Gear
+                </div>
+                <table class="table" ng-if="gear">
+                    <tbody>
+                    <tr ng-repeat="(slot,categories) in gear.tree">
+                        <th><label for="slot_{{slot}}_button">{{ slot }}</label></th>
+                        <td>
+                            <div class="btn-group" uib-dropdown is-open="status.isopen" on-toggle="dropdownOpened(slot, open)">
+                                <button id="slot_{{slot}}_button" type="button" class="btn btn-default" uib-dropdown-toggle>
+                                    <span class="caret pull-right"></span>
+                                    {{ (item = gear.flat[equippedGear[slot]]).none }}
+                                    <span ng-include="'dropdown_item'"></span>
+                                </button>
+                                <ul id="slot_{{slot}}_dropdown" uib-dropdown-menu role="menu"
+                                    aria-labelledby="slot_{{slot}}_button">
+                                    <li class="dropdown-header clearfix" ng-repeat-start="(category, items) in categories">
+                                        {{ category }}
+                                    </li>
+                                    <li ng-repeat="item in items" ng-selected="item.key == equippedGear[slot]" ng-repeat-end
+                                    ng-class="{'active': item.key == equippedGear[slot]}" id="item_{{ item.key }}">
+                                        <a ng-click="useGear(slot, item)" href="javascript:void(0)" class="clearfix">
+                                            <span ng-include="'dropdown_item'"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/ng-template" id="dropdown_item">
+    {{ item.text }}
+    <span class="pull-right">
+        <strong>
+            <span ng-repeat="attribute in attributesToUse" ng-if="item[attribute]">
+                +{{ item[attribute] }} {{ attribute }}
+            </span>
+        </strong>
+    </span>
+</script>

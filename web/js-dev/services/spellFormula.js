@@ -269,17 +269,25 @@ define([
 
 
     module.service('spellFormulaService', [
-        '$q', 'userService', 'groupService', 'members',
-        function ($q, userService, groupService, members) {
+        '$q', 'userService', 'groupService',
+        function ($q, userService, groupService) {
             return {
-                calculateAll: function () {
+                calculateAll: function (userData) {
                     var defer = $q.defer();
 
                     $q.all([
                         groupService.getPartyMembers(),
-                        userService.getData(),
-                        userService.getAttributes(),
-                        userService.getAttributes(true)
+                        (function () {
+                            if (userData) {
+                                var defer = $q.defer();
+                                defer.resolve(userData);
+                                return defer.promise;
+                            } else {
+                                return userService.getData();
+                            }
+                        }()),
+                        userService.getAttributes(false, userData),
+                        userService.getAttributes(true, userData)
                     ]).then(function (values) {
                         var partyMembers       = values[0],
                             userData           = values[1],

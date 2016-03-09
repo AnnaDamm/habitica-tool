@@ -1,4 +1,5 @@
 define([
+    './config',
     './content',
     './group',
     './spellFormula',

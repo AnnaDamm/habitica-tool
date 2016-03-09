@@ -16,17 +16,23 @@ define([
                     }
                     return allContent;
                 },
-                getGear: function () {
+                getAllGear: function() {
                     var defer = $q.defer();
-
                     if (!gear) {
                         this.getAll().then(function (all) {
-                            gear = all.gear.flat;
-                            defer.resolve(gear);
+                            defer.resolve(all.gear);
                         });
                     } else {
                         defer.resolve(gear);
                     }
+
+                    return defer.promise;
+                },
+                getGear: function () {
+                    var defer = $q.defer();
+                    this.getAllGear().then(function (gear) {
+                        defer.resolve(gear.flat);
+                    });
 
                     return defer.promise;
                 }

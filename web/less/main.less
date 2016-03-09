@@ -1,7 +1,6 @@
 @import "../lib/bootstrap/less/bootstrap";
 
-
-div.panel-body>.table {
+div.panel-body > .table {
   margin-bottom: 0;
 }
 
@@ -10,6 +9,34 @@ div.main {
     .value {
       text-align: right;
       font-weight: bold;
+    }
+  }
+}
+
+div.gear {
+  .btn-group.dropdown {
+    width: 100%;
+
+    button {
+      width: 100%;
+      text-align: left;
+
+      .caret {
+        margin-left: 3px;
+        margin-top: 8px;
+      }
+    }
+
+    ul {
+      max-height: 300px;
+      overflow: auto;
+
+      li {
+        width: 100%;
+        &.active {
+          background: @btn-primary-color;
+        }
+      }
     }
   }
 }

@@ -5,32 +5,30 @@ define([
 ], function (ng, module, html) {
     "use strict";
     module.controller('MainController', [
-        '$scope', '$state', '$timeout',
-        'localStorageService',
+        '$scope', '$rootScope', 'configService',
         'userService', 'spellFormulaService',
         MainController
     ]).run(function ($templateCache) {
         $templateCache.put('templates/main.html', html);
     });
 
-    function MainController($scope, $state, $timeout,
-                            localStorageService,
+    function MainController($scope, $rootScope, configService,
                             userService, spellFormulaService) {
 
-        $scope.apiToken = localStorageService.get('apiToken');
-        $scope.userId   = localStorageService.get('userId');
+        if (!configService.checkValid()) {
+            return;
+        }
 
         $scope.round = spellFormulaService.round;
 
-        if ($scope.apiToken === null || $scope.userId === null) {
-            return $timeout(function () {
-                $state.go('config');
-            }, 0);
-        }
+        $rootScope.$on('userData.change', function (event, userData) {
+            $scope.userData = userData;
+            spellFormulaService.calculateAll($scope.userData).then(function (calculated) {
+                $scope.calculatedSpells = calculated;
+            });
+        });
 
         userService.getData().then(function (userData) {
-            $scope.userData = userData;
-
             $scope.tasks = userData.habits
                 .concat(userData.dailys)
                 .concat(userData.todos.filter(function (todo) {
@@ -39,6 +37,8 @@ define([
                 .sort(function (a, b) {
                     return b.value - a.value;
                 });
+
+            $rootScope.$emit('userData.change', userData);
         });
 
         userService.getAttributes().then(function (attributes) {
@@ -47,10 +47,6 @@ define([
 
         userService.getSpells().then(function (spells) {
             $scope.spells = spells;
-        });
-
-        spellFormulaService.calculateAll().then(function (calculated) {
-            $scope.calculatedSpells = calculated;
         });
     }
 });
