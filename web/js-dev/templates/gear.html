@@ -32,8 +32,14 @@
         <div class="col-lg-6">
             <div class="gear panel panel-default">
                 <div class="panel-heading clearfix">
-                    <button class="pull-right btn btn-sm btn-default" ng-click="reset()">Reset</button>
-                    Gear
+                    <div class="middle">
+                        <button class="pull-right btn btn-sm btn-default" ng-click="reset()">Reset</button>
+                        <div class="pull-right" ng-if="costs">
+                            <span ng-repeat="(type, cost) in costs">{{ type }}: {{ cost }} </span>
+                            <span ng-if="costs.gems"> -> gold: {{ costs.gold + getGemCosts(costs.gems)}}</span>
+                        </div>
+                        Gear
+                    </div>
                 </div>
                 <table class="table" ng-if="gear">
                     <tbody>
@@ -76,5 +82,6 @@
                 +{{ item[attribute] }} {{ attribute }}
             </span>
         </strong>
+        <span class="gold" ng-if="!ownedGear[item.key] && item.value > 0">{{ item.value }}g</span>
     </span>
 </script>

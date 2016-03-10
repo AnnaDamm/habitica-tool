@@ -5,15 +5,17 @@ define([
 ], function (ng, module, html) {
     "use strict";
     module.controller('GearController', [
-        '$scope', '$rootScope', '$q', '$anchorScroll',
+        '$scope', '$rootScope', '$q',
         'configService', 'userService', 'contentService',
+        'classChangeCosts', 'gemCosts',
         GearController
     ]).run(function ($templateCache) {
         $templateCache.put('templates/gear.html', html);
     });
 
-    function GearController($scope, $rootScope, $q, $anchorScroll,
-                            configService, userService, contentService) {
+    function GearController($scope, $rootScope, $q,
+                            configService, userService, contentService,
+                            classChangeCosts, gemCosts) {
 
         if (!configService.checkValid()) {
             return;
@@ -22,16 +24,17 @@ define([
         $scope.attributesToUse = userService.attributesToUse;
 
         $scope.gearChange = function () {
-            $scope.gearBonus = userService.getGearBonuses($scope.equippedGear, $scope.userData.stats.class, $scope.gear.flat);
-            $scope.attributes = userService.calculateAttributes($scope.userData, $scope.gearBonus, true);
+            $scope.gearBonus                    = userService.getGearBonuses($scope.equippedGear, $scope.userData.stats.class, $scope.gear.flat);
+            $scope.attributes                   = userService.calculateAttributes($scope.userData, $scope.gearBonus, true);
             $scope.userData.items.gear.equipped = $scope.equippedGear;
+            $scope.costs                        = getCosts();
         };
 
         $scope.userDataChange = function () {
             $scope.levelBonus = userService.getLevelBonus($scope.userData.stats.lvl);
         };
 
-        var firstOpened = {};
+        var firstOpened       = {};
         $scope.dropdownOpened = function (slot, isOpen) {
             if (isOpen && !firstOpened[slot]) {
                 var $dropdown = $("#slot_" + slot + "_dropdown"),
@@ -48,7 +51,68 @@ define([
             emitChange();
         };
 
-        $scope.reset = function() {
+        function getCosts() {
+            var costs        = {
+                    gold: 0,
+                    gems: 0
+                },
+                classChanges = {};
+
+            function addClassChangeCosts() {
+                ng.forEach(classChangeCosts, function (amount, type) {
+                    costs[type] += amount;
+                });
+            }
+
+            ng.forEach($scope.equippedGear, function (itemName, slot) {
+                if ($scope.ownedGear[itemName]) {
+                    return;
+                }
+
+                var item = $scope.gear.flat[itemName];
+
+                if (item.klass && item.klass !== 'base') {
+                    if (item.klass !== $scope.userData.stats.class && !classChanges[item.klass]) {
+                        addClassChangeCosts();
+                        classChanges[item.klass] = true;
+                    }
+
+                    // class items have to be purchased one by one
+                    var classItems = $scope.gear.tree[slot][item.klass];
+                    for (var number in classItems) {
+                        if (!classItems.hasOwnProperty(number)) {
+                            continue;
+                        }
+                        var currentItem = classItems[number];
+                        if ($scope.ownedGear[currentItem.key]) {
+                            continue;
+                        }
+
+                        costs.gold += currentItem.value;
+
+                        if (currentItem.key == itemName) {
+                            break;
+                        }
+                    }
+                }
+            });
+
+            // add costs to change back to original class
+            if (Object.keys(classChanges).length) {
+                addClassChangeCosts();
+            }
+
+            if (costs.gold || costs.gems) {
+                return costs;
+            }
+            return null;
+        }
+
+        $scope.getGemCosts = function (gems) {
+            return gems * gemCosts.gold;
+        };
+
+        $scope.reset = function () {
             $q.all([
                 userService.getData(),
                 contentService.getAllGear(),
@@ -60,10 +124,10 @@ define([
 
                 $scope.userData     = userData;
                 $scope.equippedGear = userData.items.gear.equipped;
+                $scope.ownedGear    = userData.items.gear.owned;
                 $scope.gear         = gear;
                 $scope.attributes   = attributes;
-
-                console.log(values);
+                $scope.costs        = getCosts();
 
                 ng.forEach($scope.gear.tree, function (category, slot) {
                     if (!$scope.equippedGear[slot]) {
