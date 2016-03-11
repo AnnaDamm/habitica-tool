@@ -40,8 +40,24 @@ namespace('compile', function () {
         });
     });
 
+    desc('Create package.json');
+    task('create-package', {async: true}, function () {
+        var fs = require('fs'),
+            packageJson = require('./package.json'),
+            json = {
+                version: packageJson.version
+            };
+
+        fs.writeFile('web/js-dev/package.json', JSON.stringify(json), function (err) {
+            if (err) {
+                throw err;
+            }
+            complete();
+        });
+    });
+
     desc('Compiles the Javascript');
-    task('js', {async: true}, function () {
+    task('js', ['create-package'], {async: true}, function () {
         jake.mkdirP('web/js');
         jake.exec([
             "node_modules/.bin/r.js -o ./web/js-dev/app.build.js",
@@ -54,7 +70,7 @@ namespace('compile', function () {
 
 namespace('release', function () {
     desc('Creates a release.');
-    task('create', ['compile:all'], {async: true}, function () {
+    task('create', ['compile:all', ['copy-package']], {async: true}, function () {
         var packageJson = require('./package.json'),
             version     = packageJson.version;
 

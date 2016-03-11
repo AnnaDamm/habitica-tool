@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
 </head>
 <body>
-<div class="container">
+<div class="container wrapper">
     <!--[if lt IE 9 ]>Your browser is not supported. Please install a newer browser.<![endif]-->
 
     <!--[if (gt IE 8)|!(IE)]><!-->
@@ -17,6 +17,7 @@
     <ui-view></ui-view>
     <!--<![endif]-->
 </div>
+<div ng-include="'templates/partials/footer.html'"></div>
 
 <!--[if (gt IE 8)|!(IE)]><!-->
 <script data-main="js/main" src="js/require.js"></script>

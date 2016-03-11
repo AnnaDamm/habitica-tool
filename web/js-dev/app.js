@@ -2,6 +2,7 @@
 define([
     'angular',
     'text!templates/partials/navbar.html',
+    'text!templates/partials/footer.html',
     'angular-ui-router',
     'angular-ui-bootstrap',
     'angular-local-storage',
@@ -9,7 +10,7 @@ define([
     'resources/index',
     'services/index',
     'config'
-], function (ng, html) {
+], function (ng, navbar, footer) {
     "use strict";
     return ng.module('app', [
         'ui.router',
@@ -21,7 +22,10 @@ define([
         'ui.bootstrap'
     ]).config(function (localStorageServiceProvider) {
         localStorageServiceProvider.setPrefix('habitica-tool');
-    }).run(function ($templateCache) {
-        $templateCache.put('templates/partials/navbar.html', html);
+    }).run(function ($templateCache, $rootScope, pkg) {
+        $templateCache.put('templates/partials/navbar.html', navbar);
+        $templateCache.put('templates/partials/footer.html', footer);
+
+        $rootScope.package = pkg;
     });
 });
