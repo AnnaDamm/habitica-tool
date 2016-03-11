@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "node_modules/.bin/jake install-deps",
     "prepublish": "node_modules/.bin/jake compile:all",
-    "postversion": "node_modules/.bin/jake release:create"
+    "version": "node_modules/.bin/jake release:create"
   },
   "repository": {
     "type": "git",

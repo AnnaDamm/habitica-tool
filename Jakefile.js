@@ -52,7 +52,9 @@ namespace('compile', function () {
             if (err) {
                 throw err;
             }
-            complete();
+            jake.exec("git add web/js-dev/package.json", function () {
+                complete();
+            });
         });
     });
 
