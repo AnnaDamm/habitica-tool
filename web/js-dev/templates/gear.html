@@ -10,7 +10,8 @@
                     <thead>
                     <tr>
                         <th>lvl</th>
-                        <th>{{ userData.stats.lvl}}</th>
+                        <th>{{ userData.stats.lvl }}</th>
+                        <th>Change</th>
                         <th>Levelbonus</th>
                         <th>Gearbonus</th>
                         <th>Total</th>
@@ -20,6 +21,10 @@
                     <tr ng-repeat="attribute in attributesToUse">
                         <th>{{ attribute }}</th>
                         <td>{{ userData.stats[attribute]}}</td>
+                        <td>
+                            <button class="btn btn-sm btn-default" ng-click="changeLevel(attribute, -1)" ng-disabled="userData.stats[attribute] == 0"><span class="glyphicon glyphicon-minus"></span></button>
+                            <button class="btn btn-sm btn-default" ng-click="changeLevel(attribute, 1)"><span class="glyphicon glyphicon-plus"></span></button>
+                        </td>
                         <td>+{{ levelBonus }}</td>
                         <td>+{{ gearBonus[attribute] }}</td>
                         <th>= {{ attributes[attribute] }}</th>
@@ -35,7 +40,7 @@
                     <div class="middle">
                         <button class="pull-right btn btn-sm btn-default" ng-click="reset()">Reset</button>
                         <div class="pull-right" ng-if="costs">
-                            <span ng-repeat="(type, cost) in costs">{{ type }}: {{ cost }} </span>
+                            <span ng-repeat="(type, cost) in costs" ng-if="cost">{{ type }}: {{ cost }} </span>
                             <span ng-if="costs.gems"> -> gold: {{ costs.gold + getGemCosts(costs.gems)}}</span>
                         </div>
                         Gear

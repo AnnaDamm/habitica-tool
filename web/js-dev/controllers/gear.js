@@ -112,6 +112,18 @@ define([
             return gems * gemCosts.gold;
         };
 
+        $scope.changeLevel = function (attribute, addition) {
+            $scope.userData.stats[attribute] += addition;
+            $scope.userData.stats.lvl += addition;
+
+            userService.getAttributes(true, $scope.userData).then(function (attributes) {
+                $scope.attributes = attributes;
+            });
+
+            $scope.userDataChange();
+            emitChange();
+        };
+
         $scope.reset = function () {
             $q.all([
                 userService.getData(),
