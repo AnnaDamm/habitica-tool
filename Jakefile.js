@@ -70,7 +70,7 @@ namespace('compile', function () {
 
 namespace('release', function () {
     desc('Creates a release.');
-    task('create', ['compile:all', ['copy-package']], {async: true}, function () {
+    task('create', ['compile:all'], {async: true}, function () {
         var packageJson = require('./package.json'),
             version     = packageJson.version;
 
