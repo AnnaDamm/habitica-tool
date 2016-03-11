@@ -29,7 +29,7 @@ define([
                     return defer.promise;
                 },
                 getLevelBonus: function (level) {
-                    return Math.ceil((level - 1) / 2);
+                    return Math.min(50, Math.ceil((level - 1) / 2));
                 },
                 getGearBonuses: function (equippedGear, userClass, gearData) {
                     var self       = this,

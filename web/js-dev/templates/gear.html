@@ -6,28 +6,31 @@
                     <button class="pull-right btn btn-sm btn-default" ng-click="reset()">Reset</button>
                     Attributes
                 </div>
-                <table class="table" ng-if="userData">
+                <table class="table attributes" ng-if="userData">
                     <thead>
                     <tr>
                         <th>lvl</th>
-                        <th>{{ userData.stats.lvl }}</th>
+                        <th class="level attribute">{{ userData.stats.lvl }}
+                            <span ng-if="userData.stats.lvl != actualLevel">
+                                <small>(<span ng-if="userData.stats.lvl > actualLevel">+</span>{{ userData.stats.lvl - actualLevel }})</small>
+                            </span></th>
                         <th>Change</th>
-                        <th>Levelbonus</th>
-                        <th>Gearbonus</th>
-                        <th>Total</th>
+                        <th class="attribute">Levelbonus</th>
+                        <th class="attribute">Gearbonus</th>
+                        <th class="attribute">Total</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr ng-repeat="attribute in attributesToUse">
                         <th>{{ attribute }}</th>
-                        <td>{{ userData.stats[attribute]}}</td>
+                        <td class="level attribute">{{ userData.stats[attribute]}}</td>
                         <td>
                             <button class="btn btn-sm btn-default" ng-click="changeLevel(attribute, -1)" ng-disabled="userData.stats[attribute] == 0"><span class="glyphicon glyphicon-minus"></span></button>
                             <button class="btn btn-sm btn-default" ng-click="changeLevel(attribute, 1)"><span class="glyphicon glyphicon-plus"></span></button>
                         </td>
-                        <td>+{{ levelBonus }}</td>
-                        <td>+{{ gearBonus[attribute] }}</td>
-                        <th>= {{ attributes[attribute] }}</th>
+                        <td class="attribute">+{{ levelBonus }}</td>
+                        <td class="attribute">+{{ gearBonus[attribute] }}</td>
+                        <th class="attribute"><span class="pull-left">=</span>{{ attributes[attribute] }}</th>
                     </tr>
                     </tbody>
                 </table>

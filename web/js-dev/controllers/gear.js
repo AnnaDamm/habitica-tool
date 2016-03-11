@@ -140,6 +140,7 @@ define([
                 $scope.gear         = gear;
                 $scope.attributes   = attributes;
                 $scope.costs        = getCosts();
+                $scope.actualLevel  = userData.stats.lvl;
 
                 ng.forEach($scope.gear.tree, function (category, slot) {
                     if (!$scope.equippedGear[slot]) {
