@@ -1,10 +1,12 @@
 define([
     'angular',
-    'angular-resource'
+    'angular-resource',
+    'angular-cached-resource'
 ], function (ng) {
     "use strict";
     return ng.module('app.resources', [
-        'ngResource'
+        'ngResource',
+        'ngCachedResource'
     ]).config(function ($httpProvider) {
         $httpProvider.interceptors.push(function (baseUrl, localStorageService) {
 
@@ -22,5 +24,9 @@ define([
             };
         });
 
+    }).run(function ($rootScope, $cachedResource) {
+        $rootScope.$on('clearCache', function () {
+            $cachedResource.clearCache();
+        });
     });
 });

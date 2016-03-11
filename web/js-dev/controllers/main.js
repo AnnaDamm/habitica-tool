@@ -19,30 +19,41 @@ define([
             return;
         }
 
-        $scope.round = spellFormulaService.round;
+        function load() {
+            $scope.round = spellFormulaService.round;
 
-        userService.getData().then(function (userData) {
-            $scope.tasks = userData.habits
-                .concat(userData.dailys)
-                .concat(userData.todos.filter(function (todo) {
-                    return !todo.completed;
-                }))
-                .sort(function (a, b) {
-                    return b.value - a.value;
-                });
+            userService.getData().then(function (userData) {
+                $scope.userData = userData;
+                $scope.tasks = userData.habits
+                    .concat(userData.dailys)
+                    .concat(userData.todos.filter(function (todo) {
+                        return !todo.completed;
+                    }))
+                    .sort(function (a, b) {
+                        return b.value - a.value;
+                    });
+            });
 
-            $scope.userData = userData;
-            spellFormulaService.calculateAll($scope.userData).then(function (calculated) {
+            userService.getAttributes().then(function (attributes) {
+                $scope.attributes = attributes;
+            });
+
+            userService.getSpells().then(function (spells) {
+                $scope.spells = spells;
+            });
+
+            spellFormulaService.calculateAll().then(function (calculated) {
                 $scope.calculatedSpells = calculated;
             });
+        }
+
+        var unbindReload = $rootScope.$on('reload', function () {
+            load();
+        });
+        $scope.$on('$destroy', function () {
+            unbindReload();
         });
 
-        userService.getAttributes().then(function (attributes) {
-            $scope.attributes = attributes;
-        });
-
-        userService.getSpells().then(function (spells) {
-            $scope.spells = spells;
-        });
+        load();
     }
 });

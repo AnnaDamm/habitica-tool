@@ -4,10 +4,14 @@ define([
 ], function (ng, module) {
     "use strict";
     module.service('contentService', [
-        '$q', 'content',
-        function ($q, content) {
+        '$q', '$rootScope', 'content',
+        function ($q, $rootScope, content) {
             var allContent,
                 gear;
+
+            $rootScope.$on('clearCache', function () {
+                allContent = undefined;
+            });
 
             return {
                 getAll:       function () {

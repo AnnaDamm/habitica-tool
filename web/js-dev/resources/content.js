@@ -2,7 +2,7 @@ define([
     './module'
 ], function (services) {
     "use strict";
-    services.factory('content', ['$resource', 'baseUrl', function ($resource, baseUrl) {
-        return $resource(baseUrl + '/content');
+    services.factory('content', ['$cachedResource', 'baseUrl', function ($cachedResource, baseUrl) {
+        return $cachedResource('content', baseUrl + '/content');
     }]);
 });

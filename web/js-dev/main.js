@@ -2,6 +2,7 @@ require.config({
     paths: {
         angular:                 "../lib/angular/angular",
         "angular-resource":      "../lib/angular-resource/angular-resource",
+        "angular-cached-resource": "../lib/angular-cached-resource/angular-cached-resource",
         "angular-local-storage": "../lib/angular-local-storage/dist/angular-local-storage",
         "angular-ui-router":     "../lib/angular-ui-router/release/angular-ui-router",
         "angular-ui-bootstrap":  "../lib/angular-bootstrap/ui-bootstrap-tpls",
@@ -16,6 +17,9 @@ require.config({
             deps:    ['jquery']
         },
         "angular-resource":      {
+            deps: ['angular']
+        },
+        "angular-cached-resource":      {
             deps: ['angular']
         },
         "angular-ui-router":     {

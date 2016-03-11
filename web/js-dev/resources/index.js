@@ -1,5 +1,6 @@
 define([
     './content',
+    './group',
     './groups',
     './members',
     './user'

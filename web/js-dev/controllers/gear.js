@@ -166,6 +166,13 @@ define([
         }
 
         $scope.reset(!initialized);
+        var unbindReload = $rootScope.$on('reload', function () {
+            $scope.reset(true);
+        });
+        $scope.$on('$destroy', function () {
+            unbindReload();
+        });
+
         initialized = true;
     }
 });

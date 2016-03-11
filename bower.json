@@ -23,6 +23,7 @@
     "less": "less.js#^2.6.0",
     "angular-local-storage": "^0.2.4",
     "text": "requirejs/text#^2.0.14",
-    "angular-bootstrap": "^1.2.4"
+    "angular-bootstrap": "^1.2.4",
+    "angular-cached-resource": "~1.4.2"
   }
 }

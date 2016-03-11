@@ -2,7 +2,9 @@ define([
     './module'
 ], function (services) {
     "use strict";
-    services.factory('members', ['$resource', 'baseUrl', function ($resource, baseUrl) {
-        return $resource(baseUrl + '/members/:id');
+    services.factory('members', ['$cachedResource', 'baseUrl', function ($cachedResource, baseUrl) {
+        return $cachedResource('members', baseUrl + '/members/:id', {
+            id: "@id"
+        });
     }]);
 });

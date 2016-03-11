@@ -1,7 +1,8 @@
 define([
     './config',
     './gear',
-    './main'
+    './main',
+    './navbar'
 ], function () {
     "use strict";
 });

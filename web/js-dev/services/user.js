@@ -9,6 +9,10 @@ define([
             var userData,
                 originalData;
 
+            $rootScope.$on('clearCache', function () {
+                userData = originalData = undefined;
+            });
+
             $rootScope.$on('userData.change', function (event, data) {
                 var defer = $q.defer();
                 defer.resolve(data);

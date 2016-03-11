@@ -4,9 +4,13 @@ define([
 ], function (ng, module) {
     "use strict";
     module.service('groupService', [
-        '$q', 'groups', 'members',
-        function ($q, groups, members) {
+        '$q', '$rootScope', 'group', 'groups', 'members',
+        function ($q, $rootScope, group, groups, members) {
             var party, partyData, memberData;
+
+            $rootScope.$on('clearCache', function () {
+                party = partyData = memberData = undefined;
+            });
 
             return {
                 getParty:        function () {
@@ -33,7 +37,7 @@ define([
                             if (!party) {
                                 partyData.resolve(null);
                             }
-                            groups.get({id: party._id}).$promise.then(function (data) {
+                            group.get({id: party._id}).$promise.then(function (data) {
                                 partyData.resolve(data);
                             })
                         });
