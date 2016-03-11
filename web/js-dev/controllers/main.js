@@ -21,13 +21,6 @@ define([
 
         $scope.round = spellFormulaService.round;
 
-        $rootScope.$on('userData.change', function (event, userData) {
-            $scope.userData = userData;
-            spellFormulaService.calculateAll($scope.userData).then(function (calculated) {
-                $scope.calculatedSpells = calculated;
-            });
-        });
-
         userService.getData().then(function (userData) {
             $scope.tasks = userData.habits
                 .concat(userData.dailys)
@@ -38,7 +31,10 @@ define([
                     return b.value - a.value;
                 });
 
-            $rootScope.$emit('userData.change', userData);
+            $scope.userData = userData;
+            spellFormulaService.calculateAll($scope.userData).then(function (calculated) {
+                $scope.calculatedSpells = calculated;
+            });
         });
 
         userService.getAttributes().then(function (attributes) {

@@ -13,6 +13,8 @@ define([
         $templateCache.put('templates/gear.html', html);
     });
 
+    var initialized = false;
+
     function GearController($scope, $rootScope, $q,
                             configService, userService, contentService,
                             classChangeCosts, gemCosts) {
@@ -124,9 +126,13 @@ define([
             emitChange();
         };
 
-        $scope.reset = function () {
+        $scope.reset = function (reload) {
+            if (reload === undefined) {
+                reload = true;
+            }
+
             $q.all([
-                userService.getData(),
+                userService.getData(reload),
                 contentService.getAllGear(),
                 userService.getAttributes(true)
             ]).then(function (values) {
@@ -140,7 +146,7 @@ define([
                 $scope.gear         = gear;
                 $scope.attributes   = attributes;
                 $scope.costs        = getCosts();
-                $scope.actualLevel  = userData.stats.lvl;
+                $scope.actualLevel  = userService.getOriginalData().stats.lvl;
 
                 ng.forEach($scope.gear.tree, function (category, slot) {
                     if (!$scope.equippedGear[slot]) {
@@ -159,6 +165,7 @@ define([
             $rootScope.$emit('userData.change', $scope.userData);
         }
 
-        $scope.reset();
+        $scope.reset(!initialized);
+        initialized = true;
     }
 });

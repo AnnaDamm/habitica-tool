@@ -4,17 +4,31 @@ define([
 ], function (ng, module) {
     "use strict";
     module.service('userService', [
-        '$q', 'user', 'contentService',
-        function ($q, user, contentService) {
-            var userData;
+        '$q', '$rootScope', 'user', 'contentService',
+        function ($q, $rootScope, user, contentService) {
+            var userData,
+                originalData;
+
+            $rootScope.$on('userData.change', function (event, data) {
+                var defer = $q.defer();
+                defer.resolve(data);
+                userData = defer.promise;
+            });
 
             return {
                 attributesToUse: [
                     'str', 'int', 'con', 'per'
                 ],
-                getData: function (reload) {
-                    if (!userData || reload === true) {
-                        userData = user.get().$promise;
+                getOriginalData: function () {
+                    return originalData;
+                },
+                getData: function (reset, reload) {
+                    if (!userData || reset === true || reload === true) {
+                        if (!userData || reload === true) {
+                            originalData = user.get();
+                        }
+
+                        userData = originalData.$promise;
                     }
 
                     return userData;
