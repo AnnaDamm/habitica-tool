@@ -32,6 +32,16 @@ div.main {
       font-weight: bold;
     }
   }
+  .panel-body {
+    ul {
+      &:not(:last-child) {
+        margin-bottom: 3px;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
 }
 
 div.gear {
